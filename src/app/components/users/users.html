@@ -1,0 +1,81 @@
+<div class="p-4">
+    <h1 class="text-xl font-bold mb-4">Users List</h1>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+            @for(header of keyNames; track $index) {
+            <th class="text-center">{{ header }}</th>
+            }
+        </thead>
+        <tbody>
+            @for(user of paginatedUsers(); track $index) {
+            <tr #row class="hover:bg-gray-100 cursor-pointer" (click)="selectUser(user)">
+                @if (editingIndex() === $index) {
+                <td><input [(ngModel)]="user.name" class="border px-2 py-1 rounded w-full" /></td>
+                <td><input [(ngModel)]="user.language" class="border px-2 py-1 rounded w-full" /></td>
+                <td>{{ user.id }}</td>
+                <td><textarea rows="3" cols="60" [(ngModel)]="user.bio"
+                        class="border px-2 py-1 rounded w-full"></textarea></td>
+                <td><input [(ngModel)]="user.version" class="border px-2 py-1 rounded w-full" /></td>
+                } @else {
+                <td>{{ user.name }}</td>
+                <td>{{ user.language }}</td>
+                <td>{{ user.id }}</td>
+                <td>{{ user.bio }}</td>
+                <td>{{ user.version }}</td>
+                }
+                <!-- <td class="text-sm px-2 py-1">
+                    @if (editingIndex() === $index) {
+                    <div>
+                        <input [(ngModel)]="user.name" class="border px-2 py-1 rounded w-full" />
+                    </div>
+                    } @else {
+                <td>{{ user.name }}</td>
+                }
+                </td>
+
+                <td class="text-sm px-2 py-1">
+                    <ng-container *ngIf="editingIndex() === $index; else viewLang">
+                        <input [(ngModel)]="user.language" class="border px-2 py-1 rounded w-full" />
+                    </ng-container>
+                    <ng-template #viewLang>{{ user.language }}</ng-template>
+                </td>
+
+                <td class="text-sm px-2 py-1">{{ user.id }}</td>
+
+                <td class="text-sm px-2 py-1">
+                    <ng-container *ngIf="editingIndex() === $index; else viewBio">
+                        <textarea rows="3" cols="60" [(ngModel)]="user.bio" class="border px-2 py-1 rounded w-full">
+                        </textarea>
+                    </ng-container>
+                    <ng-template #viewBio>{{ user.bio }}</ng-template>
+                </td>
+                <td class="text-sm px-2 py-1">
+                    <ng-container *ngIf="editingIndex() === $index; else viewVer">
+                        <input [(ngModel)]="user.version" class="border px-2 py-1 rounded w-full" />
+                    </ng-container>
+                    <ng-template #viewVer>{{ user.version }}</ng-template>
+                </td> -->
+                <td>
+                    <button *ngIf="editingIndex() !== $index" class="btn btn-sm btn-warning"
+                        (click)="editUser(user, $index, row); $event.stopPropagation()">Edit</button>
+                    <button *ngIf="editingIndex() === $index" class="btn btn-sm btn-secondary"
+                        (click)="cancelEdit(); $event.stopPropagation()">Cancel</button>
+                </td>
+            </tr>
+            }
+            <tr>
+                <td colspan="5" class="text-center">
+                    <button class="btn btn-primary" (click)="previousPage()"
+                        [disabled]="currentPage === 1">Previous</button>
+                    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+                    <button class="btn btn-primary" (click)="nextPage()"
+                        [disabled]="currentPage === totalPages">Next</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <button *ngIf="editingIndex() !== null" class="btn btn-success m-2" (click)="saveUser()">Save</button>
+    </div>
+</div>
